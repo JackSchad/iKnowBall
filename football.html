@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+    <header style="position: absolute; top: 0; left: 0; margin: 0; padding: 0;">
+        <a href="index.html" style="text-decoration: none;">
+            <h1 style="display: inline; margin: 0; padding: 0;">
+                <span style="color: rgb(255, 106, 0);">i</span>
+                <span style="color: rgb(51, 255, 0);">K</span>
+                <span style="color: rgb(51, 255, 0);">B</span>
+            </h1>
+        </a>
+    </header>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Pro Football Quiz</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1><span class="orange-i">i</span>KnowBall - Daily Pro Football Quiz</h1>
+    </header>
+    <section id="daily-quiz">
+        <h2>Daily Pro Football Quiz</h2>
+        <div id="quiz-container">
+            <button onclick="startQuiz()">Start Today's Quiz</button>
+            <div id="question-section" style="display:none;">
+                <p id="question">Question goes here...</p>
+                <ul id="answers">
+                    <!-- Answer options will be generated here -->
+                </ul>
+                <button onclick="nextQuestion()">Next Question</button>
+            </div>
+        </div>
+    </section>
+    <div id="quiz-result-popup" class="popup">
+        <div class="popup-content" style="background-color: rgb(0, 0, 69); color: white;">
+            <span class="close" onclick="closePopup()">&times;</span>
+            <h2>Your Score</h2>
+            <p id="final-score"></p>
+            <div id="result-details"></div>
+            <div class="quiz-links">
+                <button onclick="location.href='baseball.html'" style="background-color: rgb(0, 0, 69); border: 2px solid neon-green; color: white; padding: 10px; margin: 5px;">Baseball Quiz</button>
+                <button onclick="location.href='basketball.html'" style="background-color: rgb(0, 0, 69); border: 2px solid neon-green; color: white; padding: 10px; margin: 5px;">Basketball Quiz</button>
+                <button onclick="location.href='hockey.html'" style="background-color: rgb(0, 0, 69)y; border: 2px solid neon-green; color: white; padding: 10px; margin: 5px;">Hockey Quiz</button>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2024 iKnowBall. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR6KVsIgB1U8CQrHa61J4Po1qfZa_0Pgp8255PmrMTOOi66T1BF8GbBRRhmMbz7JJNOG3zuzGg8-tju/pub?gid=0&single=true&output=csv";
+        let questions = [];
+        let score = 0;
+        let currentQuestionIndex = 0;
+        let hasAnswered = false;
+        let selectedAnswers = [];
+
+        // Fetch questions from the CSV
+        function fetchQuestionsFromCsv() {
+            fetch(csvUrl)
+                .then(response => response.text())
+                .then(csvData => {
+                    const today = formatDate(new Date());
+                    questions = parseCsv(csvData).filter(question => question.date === today);
+
+                    if (questions.length > 0) {
+                        startQuiz();
+                    } else {
+                        alert("No quiz available for today!");
+                    }
+                })
+                .catch(error => console.error("Error fetching questions:", error));
+        }
+
+        function formatDate(date) {
+            const options = { month: '2-digit', day: '2-digit', year: '2-digit' };
+            return date.toLocaleDateString('en-US', options);
+        }
+
+        function parseCsv(data) {
+            const rows = data.split("\n").slice(1); // Skip header row
+            return rows.map(row => {
+                const [date, category, question, option1, option2, option3, option4, correctAnswer] = row.split(",");
+                return {
+                    date: date.trim(),
+                    category: category.trim(),
+                    question: question.trim(),
+                    options: [option1.trim(), option2.trim(), option3.trim(), option4.trim()],
+                    correctAnswer: correctAnswer.trim()
+                };
+            });
+        }
+
+        function startQuiz() {
+            score = 0;
+            currentQuestionIndex = 0;
+            selectedAnswers = []; // Reset selected answers
+            displayQuestion(currentQuestionIndex);
+            document.getElementById("question-section").style.display = "block";
+            document.getElementById("quiz-result-popup").style.display = "none"; // Hide the popup until the end
+        }
+
+        function displayQuestion(index) {
+            hasAnswered = false;
+            const question = questions[index];
+            document.getElementById("question").innerText = question.question;
+
+            const answerList = document.getElementById("answers");
+            answerList.innerHTML = "";
+            const labels = ["A", "B", "C", "D"];
+            question.options.forEach((option, i) => {
+                const button = document.createElement("button");
+                button.innerText = `${labels[i]}. ${option}`;
+                button.onclick = () => checkAnswer(button, labels[i], question.correctAnswer);
+                button.classList.add("answer-button");
+                answerList.appendChild(button);
+            });
+        }
+
+        function checkAnswer(button, selectedAnswer, correctAnswer) {
+            if (!hasAnswered) {
+                const buttons = document.querySelectorAll(".answer-button");
+
+                // Disable all buttons to prevent further selection
+                buttons.forEach(btn => btn.disabled = true);
+
+                // Highlight the correct answer in green
+                buttons.forEach(btn => {
+                    if (btn.innerText.startsWith(correctAnswer)) {
+                        btn.classList.add("correct-answer"); // Add the class for correct answers
+                    }
+                });
+
+                // If selected answer is wrong, highlight it in red
+                if (selectedAnswer !== correctAnswer) {
+                    button.classList.add("incorrect-answer"); // Add the class for incorrect answers
+                } else {
+                    score++; // Increment score if the answer is correct
+                }
+
+                // Store the selected answer and whether it's correct
+                selectedAnswers.push({
+                    question: questions[currentQuestionIndex].question,
+                    selectedAnswer: selectedAnswer,
+                    correctAnswer: correctAnswer,
+                    isCorrect: selectedAnswer === correctAnswer
+                });
+
+                hasAnswered = true; // Mark the question as answered
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                displayQuestion(currentQuestionIndex);
+            } else {
+                document.getElementById("question-section").style.display = "none";
+                showPopup();
+            }
+        }
+
+        function showPopup() {
+            const finalScoreText = `${score}/${questions.length}`;
+            let message = "";
+            if (score === questions.length) {
+                message = "Perfect Score! Fantastic!";
+            } else if (score >= Math.floor(0.8 * questions.length)) {
+                message = "Great Job!";
+            } else if (score >= Math.floor(0.5 * questions.length)) {
+                message = "Good Effort!";
+            } else {
+                message = "Better luck next time!";
+            }
+            document.getElementById("final-score").innerText = `${finalScoreText} - ${message}`;
+
+            let resultDetails = "";
+            selectedAnswers.forEach((answer, i) => {
+                resultDetails += `${i + 1}. `;
+                if (answer.isCorrect) {
+                    resultDetails += `🟩 ${answer.question}\n`; // Green for correct answers
+                } else {
+                    resultDetails += `🟥 ${answer.question}\n`; // Red for incorrect answers
+                }
+            });
+            document.getElementById("result-details").innerText = resultDetails;
+
+            document.getElementById("quiz-result-popup").style.display = "block";
+        }
+
+        function closePopup() {
+            document.getElementById("quiz-result-popup").style.display = "none";
+        }
+
+        fetchQuestionsFromCsv();
+    </script>
+</body>
+</html>

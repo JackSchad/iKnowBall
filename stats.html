@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iKnowBall - Home</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1><span class="orange-i">i</span>KnowBall</h1>
+    </header>
+<body>
+    <header>
+        <h1><span class="orange-i">i</span>KnowBall</h1>
+    </header>
+<body>
+    <header>
+        <h1>iKnowBall</h1>
+        <nav>
+            <ul>
+                <li><a href="quiz.html">Daily Quiz</a></li>
+                <li><a href="1v1.html">1v1 Mode</a></li>
+                <li><a href="stats.html">Stats</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="stats">
+        <h2>Your Stats</h2>
+        <p>See how you stack up against others and track your lifetime stats!</p>
+        
+        <div id="stats-container">
+            <p>Your Total Correct Answers: <span id="total-correct">0</span></p>
+            <p>Your Lifetime Accuracy: <span id="lifetime-accuracy">0%</span></p>
+            <p>Average Correct Answers (All Players): <span id="avg-correct">0</span></p>
+            <p>Average Accuracy (All Players): <span id="avg-accuracy">0%</span></p>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 iKnowBall. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function calculateStats() {
+            const playersData = JSON.parse(localStorage.getItem("playersData")) || [];
+            let totalCorrect = 0, totalAccuracy = 0, numEntries = playersData.length;
+
+            playersData.forEach(entry => {
+                totalCorrect += entry.correctAnswers;
+                totalAccuracy += entry.accuracy;
+            });
+
+            const avgCorrect = numEntries > 0 ? (totalCorrect / numEntries).toFixed(2) : 0;
+            const avg

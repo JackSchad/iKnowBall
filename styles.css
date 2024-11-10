@@ -1,0 +1,207 @@
+/* styles.css */
+
+/* Overall Background */
+body {
+    background-color: rgb(0, 0, 69); /* Dark navy blue */
+    color: white;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header styling */
+header h1 {
+    color: white;
+    text-align: center;
+    font-size: 2rem;
+}
+
+/* Custom Colors for iKnowBall */
+header h1 .orange-i {
+    color: rgb(255, 106, 0); /* Bright orange for lowercase "i" */
+}
+
+header h1 span:first-child + span {
+    color: rgb(51, 255, 0); /* Neon green for capital "K" and "B" */
+}
+
+/* Quiz Section */
+#daily-quiz {
+    text-align: center;
+    padding: 20px;
+}
+
+#question-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#question {
+    font-size: 1.2rem;
+    margin: 20px;
+}
+
+/* Answer buttons */
+.answer-button {
+    background-color: white;
+    color: black;
+    border: 2px solid rgb(0, 191, 255); /* Cyan border */
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover effect (only applies if no answer is selected) */
+.answer-button:not(.selected):hover {
+    background-color: rgb(0, 191, 255); /* Cyan hover effect */
+    color: white;
+}
+
+/* Correct and Incorrect Feedback */
+.correct-answer {
+    background-color: rgb(95, 255, 81); /* Bright neon green */
+    color: black;
+    font-weight: bold;
+}
+
+.incorrect-answer {
+    background-color: rgb(255, 42, 42); /* Bright red */
+    color: black;
+    font-weight: bold;
+}
+
+/* Disable hover once an answer has been selected */
+.answer-button.selected {
+    cursor: not-allowed; /* Prevent further interaction */
+    background-color: inherit; /* Keep the final selected color */
+}
+
+/* Popup for Quiz Results */
+#quiz-result-popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(0, 0, 69); /* Dark navy blue */
+    color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    width: 80%;
+    max-width: 400px;
+    text-align: center;
+    z-index: 1000;
+}
+
+#quiz-result-popup h2 {
+    margin-top: 0;
+    font-size: 1.5rem;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+/* Result Details Section */
+#result-details {
+    text-align: left;
+    margin-top: 10px;
+    white-space: pre-wrap; /* Keeps emoji results in list format */
+}
+
+/* Result Icons */
+#result-details .correct-icon {
+    color: rgb(95, 255, 81); /* Bright neon green for correct */
+}
+
+#result-details .incorrect-icon {
+    color: rgb(255, 42, 42); /* Bright red for incorrect */
+}
+
+/* Button Links for "Start Today's Quiz" and "Next Question" */
+.quiz-links button {
+    background-color: white;
+    color: black;
+    border: 2px solid rgb(0, 191, 255); /* Cyan border for quiz links */
+    padding: 10px;
+    margin: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+    border-radius: 4px;
+}
+
+/* Hover effect on "Start Today's Quiz" and "Next Question" buttons */
+.quiz-links button:hover {
+    background-color: rgb(0, 191, 255);
+    color: white;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: rgb(7, 0, 60);
+    color: white;
+    font-size: 0.8rem;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: rgb(0, 0, 69);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+header h1 {
+    font-size: 2.5em;
+    margin: 20px;
+    color: neon-green; /* Use the neon green color defined */
+}
+
+#home-page {
+    text-align: center;
+}
+
+#quiz-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+#quiz-buttons button {
+    background-color: rgb(0, 0, 69);
+    border: 2px solid neon-green;
+    color: white;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#quiz-buttons button:hover {
+    background-color: neon-green;
+    color: rgb(0, 0, 69);
+}
+
+footer p {
+    margin-top: 20px;
+    font-size: 0.9em;
+    color: white;
+}
